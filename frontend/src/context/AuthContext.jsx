@@ -1,0 +1,57 @@
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import api from "../services/api";
+
+const AuthContext = createContext(null);
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  const [token, setToken] = useState(() => localStorage.getItem("token") || "");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+  }, [token]);
+
+  const login = async (email, password) => {
+    setLoading(true);
+    const response = await api.post("/auth/login", { email, password });
+    const { token: authToken, user: authUser } = response.data;
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("user", JSON.stringify(authUser));
+    setToken(authToken);
+    setUser(authUser);
+    setLoading(false);
+    return response.data;
+  };
+
+  const register = async (name, email, password, role = "Employee") => {
+    setLoading(true);
+    const response = await api.post("/auth/register", { name, email, password, role });
+    setLoading(false);
+    return response.data;
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken("");
+    setUser(null);
+  };
+
+  const value = useMemo(
+    () => ({ user, token, loading, login, register, logout }),
+    [user, token, loading]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
+}

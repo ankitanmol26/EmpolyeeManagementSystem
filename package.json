@@ -1,0 +1,21 @@
+{
+  "name": "fsd-application",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "start": "npm --prefix backend run start"
+  },
+  "dependencies": {
+    "axios": "^1.18.1",
+    "bootstrap": "^5.3.8",
+    "react-countup": "^6.5.3",
+    "react-icons": "^5.7.0",
+    "react-router-dom": "^7.18.1",
+    "recharts": "^3.9.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.2",
+    "postcss": "^8.5.16",
+    "tailwindcss": "^4.3.2"
+  }
+}
