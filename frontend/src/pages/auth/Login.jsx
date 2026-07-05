@@ -32,7 +32,12 @@ function Login() {
       await login(formData.email, formData.password);
       navigate("/dashboard");
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed");
+      if (!err?.response) {
+        setError("Cannot connect to backend. Start the backend on port 5000 and try again.");
+        return;
+      }
+
+      setError(err.response.data?.message || "Login failed");
     }
   };
 

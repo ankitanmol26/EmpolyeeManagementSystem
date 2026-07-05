@@ -20,21 +20,27 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     setLoading(true);
-    const response = await api.post("/auth/login", { email, password });
-    const { token: authToken, user: authUser } = response.data;
-    localStorage.setItem("token", authToken);
-    localStorage.setItem("user", JSON.stringify(authUser));
-    setToken(authToken);
-    setUser(authUser);
-    setLoading(false);
-    return response.data;
+    try {
+      const response = await api.post("/auth/login", { email, password });
+      const { token: authToken, user: authUser } = response.data;
+      localStorage.setItem("token", authToken);
+      localStorage.setItem("user", JSON.stringify(authUser));
+      setToken(authToken);
+      setUser(authUser);
+      return response.data;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (name, email, password, role = "Employee") => {
     setLoading(true);
-    const response = await api.post("/auth/register", { name, email, password, role });
-    setLoading(false);
-    return response.data;
+    try {
+      const response = await api.post("/auth/register", { name, email, password, role });
+      return response.data;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const logout = () => {
