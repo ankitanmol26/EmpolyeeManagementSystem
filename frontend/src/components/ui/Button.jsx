@@ -8,7 +8,9 @@ onClick,
 
 type="button",
 
-className=""
+className="",
+
+disabled=false
 
 }){
 
@@ -25,6 +27,8 @@ transition={{duration:.2}}
 type={type}
 
 onClick={onClick}
+
+disabled={disabled}
 
 className={
 
@@ -43,6 +47,10 @@ shadow-lg
 hover:bg-indigo-700
 
 transition-all
+
+disabled:cursor-not-allowed
+
+disabled:opacity-60
 
 ${className}`
 

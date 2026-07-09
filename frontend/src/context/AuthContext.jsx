@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import api from "../services/api";
-
-const AuthContext = createContext(null);
+import { useEffect, useMemo, useState } from "react";
+import { AuthContext } from "./AuthProviderContext";
+import { loginUser, registerUser } from "../services/authService";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -21,7 +20,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await api.post("/auth/login", { email, password });
+      const response = await loginUser(email, password);
       const { token: authToken, user: authUser } = response.data;
       localStorage.setItem("token", authToken);
       localStorage.setItem("user", JSON.stringify(authUser));
@@ -36,7 +35,7 @@ export function AuthProvider({ children }) {
   const register = async (name, email, password, role = "Employee") => {
     setLoading(true);
     try {
-      const response = await api.post("/auth/register", { name, email, password, role });
+      const response = await registerUser(name, email, password, role);
       return response.data;
     } finally {
       setLoading(false);
@@ -56,8 +55,4 @@ export function AuthProvider({ children }) {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

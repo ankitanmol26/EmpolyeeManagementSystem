@@ -1,10 +1,11 @@
 import { FiBell, FiMoon, FiSearch, FiSun } from "react-icons/fi";
-import { useAuth } from "../context/AuthContext";
-import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../hooks/useAuth";
+import { useTheme } from "../hooks/useTheme";
 
 function Navbar({ searchValue, onSearchChange }) {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const canSearch = typeof onSearchChange === "function";
 
   return (
     <header className="h-20 px-8 shadow-sm flex items-center justify-between bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100 border-b border-slate-200 dark:border-slate-800">
@@ -15,9 +16,10 @@ function Navbar({ searchValue, onSearchChange }) {
 
         <input
           type="text"
-          value={searchValue}
-          onChange={(event) => onSearchChange(event.target.value)}
+          value={searchValue || ""}
+          onChange={(event) => canSearch && onSearchChange(event.target.value)}
           placeholder="Search employees..."
+          disabled={!canSearch}
           className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-400 outline-none dark:border-slate-700 dark:bg-slate-800"
         />
 
@@ -39,7 +41,7 @@ function Navbar({ searchValue, onSearchChange }) {
 
           <div className="w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold">
 
-            A
+            {user?.name?.charAt(0)?.toUpperCase() || "A"}
 
           </div>
 

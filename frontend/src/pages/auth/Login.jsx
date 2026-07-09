@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiEye, FiEyeOff, FiMail, FiLock } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import Button from "../../components/ui/Button";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth";
 
 function Login() {
   const navigate = useNavigate();
@@ -30,10 +31,11 @@ function Login() {
 
     try {
       await login(formData.email, formData.password);
+      toast.success("Login successful.");
       navigate("/dashboard");
     } catch (err) {
       if (!err?.response) {
-        setError("Cannot connect to backend. Start the backend on port 5000 and try again.");
+        setError("Cannot connect to the deployed backend. Please try again shortly.");
         return;
       }
 

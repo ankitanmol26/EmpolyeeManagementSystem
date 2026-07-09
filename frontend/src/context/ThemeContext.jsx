@@ -1,6 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-const ThemeContext = createContext(null);
+import { useEffect, useMemo, useState } from "react";
+import { ThemeContext } from "./ThemeProviderContext";
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
@@ -17,8 +16,4 @@ export function ThemeProvider({ children }) {
   const value = useMemo(() => ({ theme, toggleTheme }), [theme]);
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
-}
-
-export function useTheme() {
-  return useContext(ThemeContext);
 }
